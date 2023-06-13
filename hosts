@@ -1,0 +1,17 @@
+[starrocks-fe]
+x.x.x.x helper_fe_leader=true helper_fe_follower=false
+x.x.x.x helper_fe_follower=true helper_fe_leader=false
+x.x.x.x helper_fe_follower=true helper_fe_leader=false
+
+[starrocks-be]
+x.x.x.x
+x.x.x.x
+x.x.x.x
+
+[starrocks:children]
+starrocks-fe
+starrocks-be
+
+[starrocks:vars]
+ansible_ssh_user=root
+ansible_ssh_pass=passwd

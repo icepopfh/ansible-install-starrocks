@@ -1,0 +1,31 @@
+---
+- name: gen starrocks fe conf
+  template: src=fe.conf.j2 dest={{STARROCKS_FE_HOME}}/conf/fe.conf
+
+- name: install starrocks fe service
+  template: src=starrocks_fe.service.j2 dest=/usr/lib/systemd/system/starrocks_fe.service
+
+- name: create meta dir
+  shell: mkdir -p {{STARROCKS_FE_HOME}}/meta
+
+- name: start starrocks fe
+  shell: source /etc/profile && /bin/bash {{STARROCKS_FE_HOME}}/bin/start_fe.sh --daemon
+  when: helper_fe_leader
+
+- name: start starrocks fe
+  shell: source /etc/profile && /bin/bash {{STARROCKS_FE_HOME}}/bin/start_fe.sh --helper {{ helper_fe_ip }}:9010 --daemon
+  when: helper_fe_follower
+
+
+#- name: reload service
+#  shell: systemctl daemon-reload
+#
+#- name: enable service
+#  service:
+#    name: starrcoks_fe
+#    enabled: yes
+#
+#- name: start service
+#  service:
+#    name: starrcoks_fe
+#    state: started

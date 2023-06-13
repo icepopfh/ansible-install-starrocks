@@ -1,0 +1,12 @@
+[Unit]
+Description=starrocks be service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart={{STARROCKS_BE_HOME}}/bin/start_be.sh --daemon
+ExecStop={{STARROCKS_BE_HOME}}/bin/stop_be.sh
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

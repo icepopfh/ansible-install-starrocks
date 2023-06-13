@@ -1,0 +1,99 @@
+---
+- name: create dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  with_items: "{{ common_directory }}"
+
+- name: install jdk
+  unarchive: src=jdk-8u131-linux-x64.tar.gz dest=/app copy=yes
+
+- name: add java env and LANG
+  blockinfile:
+    path: /etc/profile
+    block: |
+      export JAVA_HOME=/app/jdk1.8.0_131
+      export PATH=$PATH:$JAVA_HOME/bin
+      export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib
+      export LANG=en_US.UTF8
+
+- name: Memory Overcommit
+  shell: echo 1 | sudo tee /proc/sys/vm/overcommit_memory
+
+- name: Transparent Huge Pages
+  shell: echo 'madvise' | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
+
+- name: stop firewalld
+  shell: systemctl stop firewalld && systemctl disable firewalld
+
+- name: disable selinux
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: 'SELINUX=disabled'
+    state: present
+
+- name: disable swap
+  sysctl:
+    name: vm.swappiness
+    value: 0
+    state: present
+    reload: yes
+
+- name: config timezone
+  shell: cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+  ignore_errors: true
+
+- name: change limits
+  lineinfile: path=/etc/security/limits.conf line={{ item }}
+  with_items:
+    - "* soft nofile 655350"
+    - "* hard nofile 655350"
+    - "* soft nproc 65535"
+    - "* hard nproc 65535"
+
+- name: Set tcp_abort_on_overflow in sysctl
+  sysctl:
+    name: net.ipv4.tcp_abort_on_overflow
+    value: 1
+    state: present
+    reload: yes
+
+- name: Set tcp_abort_on_overflow in sysctl
+  sysctl:
+    name: net.core.somaxconn
+    value: 1024
+    state: present
+    reload: yes
+
+- name: Set threads-max in sysctl
+  sysctl:
+    name: kernel.threads-max
+    value: 120000
+    state: present
+    reload: yes
+
+- name: Set threads-max in sysctl
+  sysctl:
+    name: vm.max_map_count
+    value: 262144
+    state: present
+    reload: yes
+
+- name: Set threads-max in sysctl
+  sysctl:
+    name: kernel.pid_max
+    value: 200000
+    state: present
+    reload: yes
+
+- name: copy starrocks.tar.gz
+  unarchive: src=StarRocks-3.0.1.tar.gz dest=/data copy=yes
+
+- name: source profile
+  shell: source /etc/profile
+
+- name: create soft link
+  file: src=/data/StarRocks-3.0.1 path=/data/starrocks state=link

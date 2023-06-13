@@ -1,0 +1,12 @@
+---
+- name: initialize server
+  include: init.yml
+  when: init
+
+- name: install starrocks fe
+  include: install-starrocks-fe.yml
+  when: install_fe
+
+- name: install starrocks be
+  include: install-starrocks-be.yml
+  when: install_be

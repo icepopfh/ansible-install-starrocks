@@ -1,0 +1,19 @@
+---
+- name: gen starrocks be conf
+  template: src=be.conf.j2 dest={{STARROCKS_BE_HOME}}/conf/be.conf
+
+- name: install starrocks be service
+  template: src=starrocks_be.service.j2 dest=/usr/lib/systemd/system/starrocks_be.service
+
+- name: reload service
+  shell: systemctl daemon-reload
+
+- name: enable service
+  service:
+    name: starrocks_be
+    enabled: yes
+
+- name: start service
+  service:
+    name: starrocks_be
+    state: started

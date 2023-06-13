@@ -1,0 +1,12 @@
+[Unit]
+Description=starrocks fe service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart={{STARROCKS_FE_HOME}}/bin/start_fe.sh --daemon
+ExecStop={{STARROCKS_FE_HOME}}/bin/stop_fe.sh
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

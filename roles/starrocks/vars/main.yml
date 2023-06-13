@@ -1,0 +1,17 @@
+---
+common_directory:
+  - /data
+  - /app
+
+# starrocks fe vars
+STARROCKS_FE_HOME: /data/starrocks/fe
+helper_fe_ip: x.x.x.x
+cloud_native_meta_port: 6090
+aws_s3_path: ""
+aws_s3_region: "cn-south-1"
+aws_s3_endpoint: "https://obs.cn-south-1.myhuaweicloud.com"
+aws_s3_access_key: ""
+aws_s3_secret_key: ""
+
+# starrocks be vars
+STARROCKS_BE_HOME: /data/starrocks/be

@@ -1,0 +1,27 @@
+---
+- hosts: starrocks
+  user: root
+  vars:
+    init: true
+    install_fe: false
+    install_be: false
+  roles:
+    - starrocks
+
+- hosts: starrocks-fe
+  user: root
+  vars:
+    init: false
+    install_fe: true
+    install_be: false
+  roles:
+    - starrocks
+
+- hosts: starrocks-be
+  user: root
+  vars:
+    init: false
+    install_fe: false
+    install_be: true
+  roles:
+    - starrocks

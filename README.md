@@ -1,0 +1,1 @@
+# ansible install starrocks 存算分离模式
