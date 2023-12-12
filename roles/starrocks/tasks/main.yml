@@ -10,3 +10,7 @@
 - name: install starrocks be
   include: install-starrocks-be.yml
   when: install_be
+
+- name: install starrocks cn
+  include: install-starrocks-cn.yml
+  when: install_cn

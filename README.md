@@ -8,10 +8,12 @@ ALTER SYSTEM ADD FOLLOWER "x.x.x.x:9010";
 SHOW PROC '/frontends'\G
 
 ### 添加BE节点
-ALTER SYSTEM ADD BACKEND "x.x.x.x:9050";
-ALTER SYSTEM ADD BACKEND "x.x.x.x:9050";
-ALTER SYSTEM ADD BACKEND "x.x.x.x:9050";
+ALTER SYSTEM ADD BACKEND "<be1>:9050", "<be2>:9050", "<be3>:9050";
 SHOW PROC '/backends'\G
 
 ### 设置root密码
 SET PASSWORD = PASSWORD('password')
+
+### 添加CN节点
+ALTER SYSTEM ADD COMPUTE NODE "<be1>:9050", "<be2>:9050", "<be3>:9050";
+SHOW PROC '/compute_nodes'\G

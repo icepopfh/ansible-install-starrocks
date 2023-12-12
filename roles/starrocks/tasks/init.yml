@@ -7,7 +7,7 @@
     group: root
   with_items: "{{ common_directory }}"
 
-- name: install jdk
+- name: install jdk8
   unarchive: src=jdk-8u131-linux-x64.tar.gz dest=/app copy=yes
 
 - name: add java env and LANG
